@@ -1,0 +1,13 @@
+tabs
+
+Search
+
+
+tab to show all results from query
+    different category selectors
+
+comparinator!
+
+calls to grocery app server
+
+geolocation tab
