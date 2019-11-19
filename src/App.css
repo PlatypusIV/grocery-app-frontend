@@ -1,8 +1,8 @@
+@import url("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css");
+
 .App {
   text-align: center;
   position: absolute;
-  align-content: center;
-  justify-content: center;
   width: 100%;
   height: 100%;
 }
@@ -14,4 +14,5 @@
 .SearchDiv{
   border:2px solid red;
   max-height: 20%;
+  width:100%;
 }
