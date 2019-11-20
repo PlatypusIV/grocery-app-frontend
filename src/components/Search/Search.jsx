@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Container, Row, Column } from 'react-bootstrap';
 import './Search.css';
 
-const stores = ['prisma', 'selver', 'city-alko', 'coop'];
+const stores = ['all','prisma', 'selver', 'city-alko', 'coop'];
 const categories = ['liha', 'puu- ja juurviljad', 'kala'];
 
 export default class Search extends React.Component {
@@ -13,18 +13,24 @@ export default class Search extends React.Component {
 		};
 	}
 
+	// componentDidUpdate=(prevProps,prevState)=>{
+	// 	// if(this.state.queryObject !== prevState.queryObject){
+	// 	// 	console.log(this.state.queryObject);
+	// 	// }
+	// }
+
 	renderList = array => {
 		let options = array.map(option => {
-			return <option>{option}</option>;
+			return <option value={option}>{option}</option>;
 		});
 
 		return options;
 	};
 
-	checkIfValidElement = val => {
+	checkIfValidElement = (val,array) => {
 		let isValid = true;
 		try {
-			if (!stores.includes(val)) {
+			if (!array.includes(val)) {
 				isValid = false;
 			}
 		} catch (error) {
@@ -34,10 +40,24 @@ export default class Search extends React.Component {
 	};
 
 	changeValue = e => {
+		// let newQueryObject = this.state.queryObject;
 		switch (e.target.id) {
-			case 'storeInput':
+			case 'storeSelect':
+				const newQuery = this.state.queryObject;
+				newQuery.store = e.target.value;
+				this.setState({
+					queryObject:newQuery
+				});
 				break;
 			case 'categoryInput':
+				if(this.checkIfValidElement(e.target.value,categories)){
+					const temp = this.state.queryObject;
+					temp.category = e.target.value;
+					this.setState({
+						queryObject: {...temp}
+					});
+				}
+
 				break;
 			case 'subCatInput':
 				break;
@@ -46,22 +66,25 @@ export default class Search extends React.Component {
 		}
 	};
 
+	onSearchButtonClicked=()=>{
+		console.log(this.state.queryObject);
+	}
+
 	render() {
 		return (
 			<div>
-				<div className="SearchBar">
+				<div className="SearchBar card bg-light">
 					<div className=".container">
 						<div className="row">
 							<div className="col-md-3">
 								<form>
-									Store:{' '}
-									<input type="text" list="storeList" onChange={this.changeValue} id="storeInput" />
-									<datalist id="storeList">{this.renderList(stores)}</datalist>
+									<label for="storeSelect">Store: </label>
+									<select id="storeSelect" onChange={this.changeValue}>{this.renderList(stores)}</select>
 								</form>
 							</div>
 							<div className="col">
 								<form id="categoryForm">
-									Category:{' '}
+									<label for="categoryInput">Category: </label>
 									<input
 										type="text"
 										list="categoryList"
@@ -73,8 +96,13 @@ export default class Search extends React.Component {
 							</div>
 							<div className="col">
 								<form>
-									Sub-category:{' '}
-									<input type="text" list="subCatList" onChange={this.changevalue} id="subCatInput" />
+									<label for="subCatInput">Sub-category: </label>
+									<input
+										type="text"
+										list="subCatList"
+										onChange={this.changevalue}
+										id="subCatInput"
+									/>
 									<datalist id="subCatList">
 										<option>To be added!</option>
 									</datalist>
@@ -82,12 +110,14 @@ export default class Search extends React.Component {
 							</div>
 							<div className="col">
 								<form id="minMaxPriceForm">
-									Min-price: <input type="number" />
-									Max-price: <input type="number" />
+									<label for="minPriceLabel">Min-price: </label>
+									<input type="number" id="minPriceLabel" />
+									<label for="maxPriceLabel">Max-price: </label>
+									<input type="number" id="maxPriceLabel" />
 								</form>
 							</div>
 							<div className="col">
-								<button className="btn-primary">Search</button>
+								<button className="btn-primary" onClick={this.onSearchButtonClicked}>Search</button>
 							</div>
 						</div>
 					</div>
