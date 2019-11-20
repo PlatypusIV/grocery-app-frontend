@@ -1,16 +1,17 @@
-import {combineReducers} from "redux";
+import { combineReducers } from 'redux';
 
 
-
-const queryReducer = (state = {query:{}}, action) => {
-	let newState = {...state};
+const queryReducer = (state = { query: {} }, action) => {
+	let newState = { ...state };
 	try {
 		switch (action.type) {
 			case 'FILL':
-                console.log(action.payload);
-                newState.query = action.payload;
+				console.log(action.payload);
+				newState.query = action.payload;
 				break;
 			case 'CLEAR':
+				console.log(action.payload);
+				newState.query = action.payload;
 				break;
 			default:
 				break;
@@ -21,14 +22,16 @@ const queryReducer = (state = {query:{}}, action) => {
 	return newState;
 };
 
-const productsReducer = (state={products:[]}, action) => {
+const productsReducer = (state = { products: [] }, action) => {
 	let newState = state;
 
 	try {
 		switch (action.type) {
 			case 'GET_NEW_PRODUCTS':
+                newState.products = action.payload;
 				break;
 			case 'CLEAR':
+                newState.products = [];
 				break;
 			default:
 				break;
@@ -39,4 +42,4 @@ const productsReducer = (state={products:[]}, action) => {
 	return newState;
 };
 
-export const rootReducer = combineReducers({products:productsReducer,query:queryReducer});
+export const rootReducer = combineReducers({ products: productsReducer, query: queryReducer });

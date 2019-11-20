@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Container, Row, Column } from 'react-bootstrap';
 import './Search.css';
 
-const stores = ['all','prisma', 'selver', 'city-alko', 'coop'];
+const stores = ['all', 'prisma', 'selver', 'city-alko', 'coop'];
 const categories = ['liha', 'puu- ja juurviljad', 'kala'];
 
 export default class Search extends React.Component {
@@ -27,7 +27,7 @@ export default class Search extends React.Component {
 		return options;
 	};
 
-	checkIfValidElement = (val,array) => {
+	checkIfValidElement = (val, array) => {
 		let isValid = true;
 		try {
 			if (!array.includes(val)) {
@@ -46,15 +46,15 @@ export default class Search extends React.Component {
 				const newQuery = this.state.queryObject;
 				newQuery.store = e.target.value;
 				this.setState({
-					queryObject:newQuery
+					queryObject: newQuery,
 				});
 				break;
 			case 'categoryInput':
-				if(this.checkIfValidElement(e.target.value,categories)){
+				if (this.checkIfValidElement(e.target.value, categories)) {
 					const temp = this.state.queryObject;
 					temp.category = e.target.value;
 					this.setState({
-						queryObject: {...temp}
+						queryObject: { ...temp },
 					});
 				}
 
@@ -66,9 +66,19 @@ export default class Search extends React.Component {
 		}
 	};
 
-	onSearchButtonClicked=()=>{
-		console.log(this.state.queryObject);
-	}
+	onSearchButtonClicked = () => {
+		// this.props.fillQueryProp(this.state.queryObject);
+		this.props.getProductsProp(this.state.queryObject);
+	};
+
+	onClearClicked = () => {
+		const empty = { store: '', category: '', subCategory: '', minPrice: '', maxPrice: '' };
+		this.setState({
+			queryObject: empty,
+		});
+
+		this.props.clearQueryProp(empty);
+	};
 
 	render() {
 		return (
@@ -79,7 +89,9 @@ export default class Search extends React.Component {
 							<div className="col-md-3">
 								<form>
 									<label for="storeSelect">Store: </label>
-									<select id="storeSelect" onChange={this.changeValue}>{this.renderList(stores)}</select>
+									<select id="storeSelect" onChange={this.changeValue}>
+										{this.renderList(stores)}
+									</select>
 								</form>
 							</div>
 							<div className="col">
@@ -97,12 +109,7 @@ export default class Search extends React.Component {
 							<div className="col">
 								<form>
 									<label for="subCatInput">Sub-category: </label>
-									<input
-										type="text"
-										list="subCatList"
-										onChange={this.changevalue}
-										id="subCatInput"
-									/>
+									<input type="text" list="subCatList" onChange={this.changevalue} id="subCatInput" />
 									<datalist id="subCatList">
 										<option>To be added!</option>
 									</datalist>
@@ -117,7 +124,12 @@ export default class Search extends React.Component {
 								</form>
 							</div>
 							<div className="col">
-								<button className="btn-primary" onClick={this.onSearchButtonClicked}>Search</button>
+								<button className="btn-primary" onClick={this.onSearchButtonClicked}>
+									Search
+								</button>
+								<button className="btn-primary" onClick={this.onClearClicked}>
+									Clear
+								</button>
 							</div>
 						</div>
 					</div>

@@ -2,9 +2,9 @@ import React from 'react';
 import './App.css';
 import { productsResults, Search } from './components/index';
 import { connect } from 'react-redux';
+import { fetcher } from './fetcher/fetcher';
 
 class App extends React.Component {
-
 	render() {
 		return (
 			<div className="App">
@@ -14,7 +14,11 @@ class App extends React.Component {
 				</header>
 				<main>
 					<div className="SearchDiv">
-						<Search />
+						<Search
+							fillQueryProp={this.props.fillQuery}
+							clearQueryProp={this.props.clearQuery}
+							getProductsProp={this.props.getProducts}
+						/>
 					</div>
 				</main>
 				<footer></footer>
@@ -32,18 +36,23 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		getProducts: queryBody => {
+		fillQuery: queryBody => {
 			dispatch({
 				type: 'FILL',
 				payload: queryBody,
 			});
 		},
-		clearQuery:()=>{
+		clearQuery: emptyQuery => {
 			dispatch({
-				type:'CLEAR',
-				payload:{}
+				type: 'CLEAR',
+				payload: emptyQuery,
 			});
-		}
+		},
+		getProducts: queryBody => {
+			fetcher.post(queryBody).then(data => {
+				console.log(data);
+			});
+		},
 	};
 };
 
