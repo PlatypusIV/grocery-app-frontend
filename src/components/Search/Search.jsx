@@ -4,6 +4,7 @@ import './Search.css';
 
 const stores = ['all', 'prisma', 'selver', 'city-alko', 'coop'];
 const categories = ['liha', 'puu- ja juurviljad', 'kala'];
+const subCategories = []; // temporary need to fill out subCategories list
 
 export default class Search extends React.Component {
 	constructor() {
@@ -21,7 +22,12 @@ export default class Search extends React.Component {
 
 	renderList = array => {
 		let options = array.map(option => {
-			return <option value={option}>{option}</option>;
+			if(option !== 'all'){
+				return <option value={option}>{option}</option>;
+			}else{
+				return <option>{option}</option>;
+			}
+			
 		});
 
 		return options;

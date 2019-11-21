@@ -3,6 +3,7 @@ import './App.css';
 import { productsResults, Search } from './components/index';
 import { connect } from 'react-redux';
 import { fetcher } from './fetcher/fetcher';
+const fs = require('fs');
 
 class App extends React.Component {
 	render() {
@@ -49,9 +50,16 @@ const mapDispatchToProps = dispatch => {
 			});
 		},
 		getProducts: queryBody => {
-			fetcher.post(queryBody).then(data => {
+			fetcher.trim(queryBody);
+			fetcher.post(fetcher.trim(queryBody)).then(data => {
 				console.log(data);
+				
 			});
+
+			// fetcher.post({store:"prisma",subCategory:"hakkliha"}).then(data => {
+			// 	console.log(data);
+				
+			// });
 		},
 	};
 };

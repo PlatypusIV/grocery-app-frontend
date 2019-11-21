@@ -3,7 +3,7 @@ import {rootReducer} from "./reducers";
 
 const state={
     query:{},
-    currentProducts:[]
+    currentProducts:{prisma:[],coop:[],selver:[]}
 }
 
 export const storeConfig = createStore(rootReducer,state);

@@ -6,27 +6,46 @@ const post = body => {
 	console.log(body);
 	try {
 		return new Promise((resolve, reject) => {
-			fetch(url, { headers: { body: body } }).then(data=>{
-                resolve(data);
-            });
+			fetch(url, {
+				method: 'POST',
+				mode: 'cors',
+				body: JSON.stringify(body),
+				headers: { 'Content-Type': 'application/json' },
+			}).then(data => {
+                // console.log(data.json());
+				resolve(data.json());
+			});
 		});
 	} catch (error) {
 		console.log(error);
 	}
 };
 
-const trim =(originalQuery)=>{
+const trim = originalQuery => {
     let newQuery = {};
-    try {
-        
-    } catch (error) {
-        
-    }
-    return newQuery;
-}
+    let tempQuery = {};
+	try {
+		if (originalQuery.store !== "all" || originalQuery.store !== "") {
+			tempQuery.store = originalQuery.store;
+		}
+		if (
+			originalQuery.subCategory !== "" ||
+			originalQuery.subCategory !== undefined ||
+			originalQuery.subCategory !== null
+		) {
+			tempQuery.subCategory = originalQuery.subCategory;
+        }
+        if(tempQuery !== {}){
+            newQuery = {...tempQuery};
+        }
+	} catch (error) {
+		console.log(error);
+	}
+	return newQuery;
+};
 
 export const fetcher = {
 	get: get,
-    post: post,
-    trim:trim
+	post: post,
+	trim: trim,
 };
