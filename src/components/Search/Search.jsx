@@ -11,14 +11,17 @@ export default class Search extends React.Component {
 		super();
 		this.state = {
 			queryObject: { store: '', category: '', subCategory: '', minPrice: '', maxPrice: '' },
+			selectedMainCategory:'',
+			selectedSubCategory:'',
+
 		};
 	}
 
-	// componentDidUpdate=(prevProps,prevState)=>{
-	// 	// if(this.state.queryObject !== prevState.queryObject){
-	// 	// 	console.log(this.state.queryObject);
-	// 	// }
-	// }
+	componentDidUpdate=(prevProps,prevState)=>{
+		if(this.state.queryObject !== prevState.queryObject){
+			console.log(this.state.queryObject);
+		}
+	}
 
 	renderList = array => {
 		let options = array.map(option => {

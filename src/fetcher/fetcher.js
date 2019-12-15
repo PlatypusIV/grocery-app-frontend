@@ -1,6 +1,19 @@
 const url = 'http://localhost:3030';
 
-const get = () => {};
+const get = () => {
+	try {
+		return new Promise((resolve,reject)=>{
+			const categoryUrl = `${url}/categories`;
+			fetch(categoryUrl).then(res=>{
+				return res.json();
+			}).then(data=>{
+				resolve(data);
+			});
+		});
+	} catch (error) {
+		console.log(error);
+	}
+};
 
 const post = body => {
 	console.log(body);

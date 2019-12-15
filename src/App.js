@@ -6,6 +6,11 @@ import { fetcher } from './fetcher/fetcher';
 const fs = require('fs');
 
 class App extends React.Component {
+
+	componentDidMount =()=>{
+		this.props.getCategories();
+	}
+
 	render() {
 		return (
 			<div className="App">
@@ -19,6 +24,7 @@ class App extends React.Component {
 							fillQueryProp={this.props.fillQuery}
 							clearQueryProp={this.props.clearQuery}
 							getProductsProp={this.props.getProducts}
+							categoriesProp={this.props.categories}
 						/>
 					</div>
 				</main>
@@ -32,6 +38,7 @@ const mapStateToProps = state => {
 	return {
 		query: state.query,
 		products: state.products,
+		categories:state.getCategories
 	};
 };
 
@@ -61,6 +68,15 @@ const mapDispatchToProps = dispatch => {
 				
 			// });
 		},
+		getCategories: ()=>{
+			fetcher.get().then(data=>{
+				dispatch({
+					type:'GET_CATEGORIES',
+					payload:data
+				});
+
+			});
+		}
 	};
 };
 
