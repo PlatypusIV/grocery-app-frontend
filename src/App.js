@@ -24,7 +24,7 @@ class App extends React.Component {
 							fillQueryProp={this.props.fillQuery}
 							clearQueryProp={this.props.clearQuery}
 							getProductsProp={this.props.getProducts}
-							categoriesProp={this.props.categories}
+							categoriesProp={this.props.categories.categories}
 						/>
 					</div>
 				</main>

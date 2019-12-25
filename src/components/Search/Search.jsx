@@ -11,26 +11,24 @@ export default class Search extends React.Component {
 		super();
 		this.state = {
 			queryObject: { store: '', category: '', subCategory: '', minPrice: '', maxPrice: '' },
-			selectedMainCategory:'',
-			selectedSubCategory:'',
-
+			selectedMainCategory: '',
+			selectedSubCategory: ''
 		};
 	}
 
-	componentDidUpdate=(prevProps,prevState)=>{
-		if(this.state.queryObject !== prevState.queryObject){
+	componentDidUpdate = (prevProps, prevState) => {
+		if (this.state.queryObject !== prevState.queryObject) {
 			console.log(this.state.queryObject);
 		}
-	}
+	};
 
 	renderList = array => {
 		let options = array.map(option => {
-			if(option !== 'all'){
+			if (option !== 'all') {
 				return <option value={option}>{option}</option>;
-			}else{
+			} else {
 				return <option>{option}</option>;
 			}
-			
 		});
 
 		return options;
@@ -59,16 +57,17 @@ export default class Search extends React.Component {
 				});
 				break;
 			case 'categoryInput':
-				if (this.checkIfValidElement(e.target.value, categories)) {
-					const temp = this.state.queryObject;
-					temp.category = e.target.value;
-					this.setState({
-						queryObject: { ...temp },
-					});
-				}
+				const temp = this.state.queryObject;
+				temp.category = e.target.value;
+				this.setState({
+					selectedMainCategory: e.target.value,
+				});
 
 				break;
 			case 'subCatInput':
+				this.setState({
+					selectedSubCategory:e.target.value
+				});
 				break;
 			default:
 				break;
@@ -87,6 +86,46 @@ export default class Search extends React.Component {
 		});
 
 		this.props.clearQueryProp(empty);
+	};
+
+	populateCategories = array => {
+		let categoryArray = [];
+		try {
+			if (array !== undefined || array !== null || array.length !== 0) {
+				Object.keys(array).forEach(key => {
+					let tempCategories = array[key].map(cat => {
+						return <option value={cat.mainCategory} key={cat.mainCategory}>{cat.mainCategory}</option>;
+					});
+					categoryArray.push(...tempCategories);
+				});
+			}
+		} catch (error) {
+			console.log(error);
+		}
+		return categoryArray;
+	};
+
+	populateSubCategories = (mainCategory,categoriesList) => {
+		let subCategories = [];
+		try {
+			if (categoriesList !== undefined || categoriesList !== null || categoriesList.length !== 0) {
+				Object.keys(categoriesList).forEach(key => {
+					let tempCategories = categoriesList[key].map(cat => {
+						if(cat.mainCategory === mainCategory){
+							return cat.subCategories.map(sub=> {
+								return <option value={sub} key={sub}>{sub}</option>;
+							});
+						}
+						
+					});
+					subCategories.push(...tempCategories);
+				});
+			}
+
+		} catch (error) {
+			console.log(error);
+		}
+		return subCategories;
 	};
 
 	render() {
@@ -112,15 +151,17 @@ export default class Search extends React.Component {
 										onChange={this.changeValue}
 										id="categoryInput"
 									/>
-									<datalist id="categoryList">{this.renderList(categories)}</datalist>
+									<datalist id="categoryList">
+										{this.populateCategories(this.props.categoriesProp)}
+									</datalist>
 								</form>
 							</div>
 							<div className="col">
 								<form>
 									<label for="subCatInput">Sub-category: </label>
-									<input type="text" list="subCatList" onChange={this.changevalue} id="subCatInput" />
+									<input type="text" list="subCatList" onChange={this.changeValue} id="subCatInput" />
 									<datalist id="subCatList">
-										<option>To be added!</option>
+										{this.populateSubCategories(this.state.selectedMainCategory,this.props.categoriesProp)}
 									</datalist>
 								</form>
 							</div>
